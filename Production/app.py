@@ -4,7 +4,7 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_cl
 
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 dropzone = Dropzone(app)
 
 
@@ -17,7 +17,7 @@ app.config['DROPZONE_ALLOWED_FILE_TYPE'] = 'image/*'
 app.config['DROPZONE_REDIRECT_VIEW'] = 'results'
 
 # Uploads settings
-app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/uploads'
+app.config['UPLOADED_PHOTOS_DEST'] = os.getcwd() + '/static'
 
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
@@ -51,16 +51,25 @@ def index():
     return render_template('index.html')
 
 
+from scanner import scan
+
 @app.route('/results')
 def results():
     
     # redirect to home if no images to display
     if "file_urls" not in session or session['file_urls'] == []:
         return redirect(url_for('index'))
-        
+    
+
     # set the file_urls and remove the session variable
     file_urls = session['file_urls']
     print(file_urls)
+    print(session)
+
+    for f in range(len(file_urls)):
+          a = scan(file_urls[f])
+          fileurls[f] = a.process()
+
     session.pop('file_urls', None)
     
     return render_template('results.html', file_urls=file_urls)
