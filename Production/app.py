@@ -55,12 +55,10 @@ from scanner import scan
 
 @app.route('/results')
 def results():
-    
     # redirect to home if no images to display
     if "file_urls" not in session or session['file_urls'] == []:
         return redirect(url_for('index'))
     
-
     # set the file_urls and remove the session variable
     file_urls = session['file_urls']
     print(file_urls)
