@@ -17,11 +17,11 @@ args = vars(ap.parse_args())
 # automatically determine the coordinates without pre-supplying them
 image = cv2.imread(args["image"])
 pts = np.array(eval(args["coords"]), dtype = "float32")
- 
+
 # apply the four point tranform to obtain a "birds eye view" of
 # the image
 warped = four_point_transform(image, pts)
- 
+
 # show the original and warped images
 cv2.imshow("Original", image)
 cv2.imshow("Warped", warped)
